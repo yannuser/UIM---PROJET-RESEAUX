@@ -1,6 +1,6 @@
 from rest_framework import permissions, viewsets, mixins
 from .models import *
-from .permissions import ReadOnlyEtudiant
+from .permissions import *
 from .serializers import *
 
 
@@ -11,17 +11,7 @@ class UtilisateurViewSet(viewsets.ModelViewSet):
     queryset = Utilisateur.objects.all().order_by("nom")
     serializer_class = UtilisateurSerializer
 
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            # Only admin users can modify or delete
-            permission_classes = [permissions.IsAdminUser]
-        else:
-            permission_classes = [permissions.IsAuthenticated]
-
-        return [permission() for permission in permission_classes]
+    permission_classes =  [permissions.IsAuthenticated, OnlyAdminModify]
 
 
 class RoleViewSet(viewsets.ModelViewSet):
@@ -30,7 +20,7 @@ class RoleViewSet(viewsets.ModelViewSet):
     """
     queryset = Role.objects.all().order_by("nomRole")
     serializer_class = RoleSerializer
-    permission_classes = [permissions.IsAuthenticated, ReadOnlyEtudiant]
+    permission_classes = [permissions.IsAuthenticated, OnlyAdminModify]
 
 
 class LogViewSet(mixins.RetrieveModelMixin,
@@ -55,7 +45,7 @@ class CoursViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class RessourceCoursViewSet(viewsets.ModelViewSet):
+class RessourceCoursViewSet(viewsets.ModelViewSet, ReadOnlyEtudiant):
     """
     API endpoint that allows course resources to be viewed or edited.
     """
@@ -70,4 +60,4 @@ class InscriptionViewSet(viewsets.ModelViewSet):
     """
     queryset = Inscription.objects.all().order_by("-dateInscription")
     serializer_class = InscriptionSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, ReadOnlyProfesseur]
