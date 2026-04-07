@@ -74,7 +74,7 @@ class Log(models.Model):
         ECHEC = "echec"
 
     idLog = models.BigAutoField(primary_key=True)
-    idUtilisateur = models.ForeignKey(Utilisateur, on_delete=models.DO_NOTHING)
+    idUtilisateur = models.ForeignKey(Utilisateur, on_delete=models.DO_NOTHING, null=True, blank=True)
     action = models.CharField(max_length=100)
     resultat = models.CharField(max_length=20, choices=ChoixResultats.choices)
     ipAdresse = models.CharField(max_length=100)

@@ -124,3 +124,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 AUTH_USER_MODEL = 'app.Utilisateur'
+
+REST_FRAMEWORK = {
+    "EXCEPTION_HANDLER": "app.exceptions.customExceptionHandler"
+}

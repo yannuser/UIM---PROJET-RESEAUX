@@ -18,7 +18,7 @@ class JournalisationMixin:
         utilisateurActuel = getattr(self.request, "user", None)
 
         if not utilisateurActuel or not utilisateurActuel.is_authenticated:
-            return
+            utilisateurActuel = None
 
         Log.objects.create(
             idUtilisateur=utilisateurActuel,
